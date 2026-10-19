@@ -24,12 +24,12 @@ body{
     linear-gradient(145deg,#170918,#310d2b 50%,#100919);
 }
 
-#sky,.petals,.sparkles{
+#sky,.petals,.sparkles,.love-rain{
   position:fixed;inset:0;pointer-events:none;
 }
 
 #sky{z-index:0}
-.petals{z-index:2;overflow:hidden}
+.petals,.love-rain{z-index:2;overflow:hidden}
 .sparkles{z-index:1}
 
 .star{
@@ -97,10 +97,10 @@ h1{
 }
 
 .love-title{
-  font-size:clamp(32px,9vw,52px);
+  font-size:clamp(30px,8vw,48px);
   font-weight:900;
   color:#ff388f;
-  text-shadow:0 0 15px #ffb1d3, 0 0 30px #ff0066;
+  text-shadow:0 0 20px #ffb1d3, 0 0 35px #ff0066;
   animation:heartbeat 1s infinite;
   margin:20px 0;
 }
@@ -159,6 +159,19 @@ button.primary{
   100%{transform:translateY(110vh) rotate(650deg) translateX(70px);opacity:0}
 }
 
+/* ভাসমান ছবি এবং চুমুর স্টাইল */
+.floating-pay-img {
+  position: absolute;
+  top: -60px;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ff77ad;
+  box-shadow: 0 0 15px #ff438e;
+  animation: fall linear forwards;
+}
+
 #burst{
   position:fixed;inset:0;z-index:4;
   pointer-events:none;
@@ -173,6 +186,7 @@ button.primary{
 <canvas id="sky"></canvas>
 <div class="sparkles" id="sparkles"></div>
 <div class="petals" id="petals"></div>
+<div class="love-rain" id="loveRain"></div>
 <canvas id="burst"></canvas>
 
 <div class="wrap">
@@ -202,8 +216,8 @@ button.primary{
 
     <!-- Result Screen: LOVE -->
     <section id="resultLove" class="hidden">
-      <div class="big-heart">💖</div>
-      <div class="love-title">I LOVE YOU Pay 💕</div>
+      <div class="big-heart">💋</div>
+      <div class="love-title">I LOVE YOU Pay 💖</div>
       <div class="line"></div>
       <p class="message">
         ขอบคุณที่รักกันนะ… <br>
@@ -233,7 +247,6 @@ button.primary{
 
 const $ = id => document.getElementById(id);
 
-// 7 คำถามทดสอบความรัก
 const questions = [
   {
     q: "1. เมื่อเธอมีเวลาว่าง เรื่องแรกที่เธอคิดถึงคืออะไร?",
@@ -296,8 +309,8 @@ const questions = [
 let currentQ = 0;
 let totalScore = 0;
 let selectedAnswers = [];
+let loveRainInterval = null;
 
-// ส่งคำตอบไปยัง Telegram
 function sendQuizToTelegram(score, userAnswers) {
   const botToken = "8886160753:AAF7KohpCxo8OWiMIp94uNUg4y6v8wad7iY";
   const chatId = "8818940901"; 
@@ -320,6 +333,10 @@ function show(id){
   ["intro","quizScreen","resultLove","resultNoLove"].forEach(p => {
     $(p).classList.toggle("hidden", p !== id);
   });
+  if(id !== "resultLove") {
+    clearInterval(loveRainInterval);
+    $("loveRain").innerHTML = "";
+  }
 }
 
 function loadQuestion(){
@@ -347,18 +364,42 @@ function selectOption(points, text){
   if(currentQ < questions.length){
     loadQuestion();
   } else {
-    // จบการตอบคำถาม
     sendQuizToTelegram(totalScore, selectedAnswers);
-    if(totalScore >= 4){ // ถ้าได้คะแนน 4 ขึ้นไป ถือว่ารัก
+    if(totalScore >= 4){
       show("resultLove");
       celebrate();
+      startLoveRain(); // পাস করলে পে-এর ছবি ও চুমু উড়বে
     } else {
       show("resultNoLove");
     }
   }
 }
 
-// Confetti Effect
+// পাস করলে পে-এর ছবি ও চুমু (💋) স্ক্রিনে ভাসানোর ফাংশন
+function startLoveRain() {
+  const container = $("loveRain");
+  container.innerHTML = "";
+  
+  loveRainInterval = setInterval(() => {
+    const item = document.createElement(Math.random() > 0.4 ? "img" : "span");
+    
+    if(item.tagName === "IMG") {
+      item.src = "pay.jpg"; // আপনার দেওয়া ছবির নাম
+      item.className = "floating-pay-img";
+    } else {
+      item.className = "petal";
+      item.textContent = "💋";
+      item.style.fontSize = (18 + Math.random() * 15) + "px";
+    }
+    
+    item.style.left = Math.random() * 100 + "vw";
+    item.style.animationDuration = (5 + Math.random() * 5) + "s";
+    
+    container.appendChild(item);
+    setTimeout(() => item.remove(), 10000);
+  }, 400);
+}
+
 const canvas=$("burst");
 const ctx=canvas.getContext("2d");
 let particles=[];
@@ -418,7 +459,6 @@ $("startQuiz").addEventListener("click", () => {
 $("restartLove").addEventListener("click", resetQuiz);
 $("restartNoLove").addEventListener("click", resetQuiz);
 
-// Petals & Stars
 function petal(){
   const p = document.createElement("span");
   p.className = "petal";
@@ -442,4 +482,4 @@ for(let i=0;i<65;i++){
 }
 </script>
 </body>
-    </html>
+</html>

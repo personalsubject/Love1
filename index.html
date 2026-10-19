@@ -1,499 +1,445 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Romantic Surprise</title>
-    <style>
-        /* CSS RESET & GENERAL STYLES */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            user-select: none;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>คำถามพิเศษสำหรับ Pay 💗</title>
 
-        body, html {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: #ffffff;
-        }
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
 
-        /* SCREEN 1: GET STARTED (SADA PAGE & KALO BUTTON) */
-        #start-screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-            transition: opacity 0.8s ease, visibility 0.8s;
-        }
+:root{
+  --pink:#ff77ad;
+  --gold:#ffe1ae;
+  --white:#fff5fa;
+}
 
-        .btn-get-started {
-            background-color: #000000;
-            color: #ffffff;
-            font-size: 20px;
-            font-weight: 600;
-            padding: 16px 40px;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            letter-spacing: 1px;
-        }
+body{
+  min-height:100vh;
+  overflow-x:hidden;
+  color:var(--white);
+  font-family:"Sarabun", "Prompt", sans-serif;
+  background:
+    radial-gradient(ellipse at 50% 0%,#79244f 0%,transparent 48%),
+    linear-gradient(145deg,#170918,#310d2b 50%,#100919);
+}
 
-        .btn-get-started:hover {
-            transform: scale(1.05);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.25);
-        }
+#sky,.petals,.sparkles{
+  position:fixed;inset:0;pointer-events:none;
+}
 
-        /* SCREEN 2: LOADING SCREEN */
-        #loading-screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #0d0d11;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.8s ease, visibility 0.8s;
-            color: #ffffff;
-        }
+#sky{z-index:0}
+.petals{z-index:2;overflow:hidden}
+.sparkles{z-index:1}
 
-        .heart-loader {
-            font-size: 50px;
-            animation: pulse 1s infinite alternate;
-            margin-bottom: 20px;
-        }
+.star{
+  position:absolute;
+  width:2px;height:2px;border-radius:50%;
+  background:white;
+  box-shadow:0 0 8px #ffb4d5;
+  animation:twinkle 2s infinite alternate;
+}
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.3); }
-        }
+@keyframes twinkle{
+  from{opacity:.2;transform:scale(.7)}
+  to{opacity:1;transform:scale(1.7)}
+}
 
-        .progress-container {
-            width: 250px;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 15px;
-        }
+.wrap{
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  padding:24px 15px;
+  position:relative;z-index:3;
+}
 
-        .progress-bar {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, #ff4b2b, #ff416c);
-            transition: width 0.1s linear;
-        }
+.card{
+  width:100%;max-width:520px;
+  padding:30px 23px;
+  border:1px solid #ffb9d65c;
+  border-radius:30px;
+  background:linear-gradient(145deg,#ffffff13,#ffffff06);
+  backdrop-filter:blur(16px);
+  box-shadow:0 0 55px #ff368c19,inset 0 0 30px #ffffff05;
+  text-align:center;
+  animation:cardIn 1.2s ease both;
+}
 
-        .loading-text {
-            font-size: 16px;
-            color: #cccccc;
-            letter-spacing: 1px;
-        }
+@keyframes cardIn{
+  from{opacity:0;transform:translateY(35px) scale(.95)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
 
-        /* SCREEN 3: MAIN ANIMATION CONTENT */
-        #main-screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #0d0d1a 0%, #1a001a 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 8;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 1s ease, visibility 1s;
-        }
+.eyebrow{
+  color:var(--gold);
+  font-size:12px;letter-spacing:3px;
+  margin-bottom:15px;
+}
 
-        /* CANVAS FOR PARTICLE BACKGROUND */
-        #canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
+.big-heart{
+  font-size:65px;display:inline-block;
+  filter:drop-shadow(0 0 20px #ff438e);
+  animation:heartbeat 1.5s infinite;
+}
 
-        /* FLOATING DOLLS & TEDDY BEARS */
-        .floating-container {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 2;
-        }
+@keyframes heartbeat{
+  0%,100%{transform:scale(1)}
+  15%{transform:scale(1.16)}
+  30%{transform:scale(1)}
+  45%{transform:scale(1.1)}
+}
 
-        .float-item {
-            position: absolute;
-            font-size: 35px;
-            animation: floatUp 8s infinite linear;
-            opacity: 0.8;
-            cursor: pointer;
-            pointer-events: auto;
-        }
+h1{
+  color:#ffe0ee;
+  font-size:clamp(22px,6vw,32px);
+  line-height:1.5;
+  margin:15px 0;
+  text-shadow:0 0 18px #ff5ca5a8;
+}
 
-        @keyframes floatUp {
-            0% {
-                transform: translateY(105vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.9;
-            }
-            90% {
-                opacity: 0.9;
-            }
-            100% {
-                transform: translateY(-10vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
+.love-title{
+  font-size:clamp(32px,9vw,52px);
+  font-weight:900;
+  color:#ff388f;
+  text-shadow:0 0 15px #ffb1d3, 0 0 30px #ff0066;
+  animation:heartbeat 1s infinite;
+  margin:20px 0;
+}
 
-        /* TEXT CONTENT CARDS */
-        .content-box {
-            position: relative;
-            z-index: 3;
-            text-align: center;
-            color: #ffffff;
-            padding: 20px;
-            max-width: 90%;
-        }
+.line{
+  width:85px;height:2px;margin:15px auto;
+  background:linear-gradient(90deg,transparent,#ffe0ad,transparent);
+}
 
-        .cartoon-icon {
-            font-size: 80px;
-            margin-bottom: 20px;
-            display: inline-block;
-            animation: bounce 2s infinite ease-in-out;
-        }
+.message{
+  font-size:16px;line-height:1.8;
+  color:#fff0f7;margin:15px 0;
+}
 
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
+.option-btn{
+  width:100%;
+  display:block;
+  text-align:left;
+  font-family:inherit;font-size:15px;
+  border:1px solid #ffffff30;
+  border-radius:18px;padding:14px 18px;
+  margin:10px 0;cursor:pointer;
+  background:#ffffff12;
+  color:#ffe5ef;
+  transition:all .3s ease;
+}
 
-        .message-text {
-            font-size: 26px;
-            font-weight: 500;
-            color: #ffe6f0;
-            text-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-            min-height: 80px;
-        }
+.option-btn:hover{
+  background:linear-gradient(135deg,#ff83b744,#ffd8a344);
+  border-color:#ff77ad;
+  transform:translateX(5px);
+}
 
-        .message-text.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
+button.primary{
+  font-family:inherit;font-size:16px;
+  border:none;
+  border-radius:50px;padding:14px 28px;
+  margin-top:15px;cursor:pointer;
+  color:#58102f;
+  font-weight:bold;
+  background:linear-gradient(135deg,#ffe5ef,#ff83b7,#ffd8a3);
+  box-shadow:0 5px 25px #ff5b9c3d;
+}
 
-        /* GRAND FINALE TITLE */
-        .love-title {
-            font-size: 55px;
-            font-weight: 800;
-            background: linear-gradient(45deg, #ff0055, #ff5088, #ff80bf);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 25px rgba(255, 0, 85, 0.6);
-            margin-bottom: 10px;
-            display: none;
-            animation: zoomIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
+.hidden{display:none!important}
 
-        .name-title {
-            font-size: 45px;
-            font-weight: 700;
-            color: #ffffff;
-            text-shadow: 0 0 20px #ff3399, 0 0 40px #ff0066;
-            display: none;
-            animation: fadeInName 1.2s ease forwards;
-        }
+.petal{
+  position:absolute;top:-40px;
+  animation:fall linear forwards;
+  filter:drop-shadow(0 0 5px #ff82b4);
+}
 
-        @keyframes zoomIn {
-            0% { transform: scale(0.3); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
+@keyframes fall{
+  0%{transform:translateY(-30px) rotate(0deg);opacity:0}
+  10%{opacity:.9}
+  100%{transform:translateY(110vh) rotate(650deg) translateX(70px);opacity:0}
+}
 
-        @keyframes fadeInName {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+#burst{
+  position:fixed;inset:0;z-index:4;
+  pointer-events:none;
+}
+
+.footer{font-size:11px;color:#c9a4ba;margin-top:24px}
+.q-count{font-size:13px;color:var(--gold);margin-bottom:10px}
+</style>
 </head>
+
 <body>
+<canvas id="sky"></canvas>
+<div class="sparkles" id="sparkles"></div>
+<div class="petals" id="petals"></div>
+<canvas id="burst"></canvas>
 
-    <!-- SCREEN 1: GET STARTED -->
-    <div id="start-screen">
-        <button class="btn-get-started" id="btn-start">Get Started</button>
-    </div>
+<div class="wrap">
+  <main class="card" id="card">
 
-    <!-- SCREEN 2: LOADING -->
-    <div id="loading-screen">
-        <div class="heart-loader">💖</div>
-        <div class="progress-container">
-            <div class="progress-bar" id="progress-bar"></div>
-        </div>
-        <div class="loading-text" id="loading-text">Loading 0%</div>
-    </div>
+    <div class="eyebrow">A SPECIAL QUIZ FOR YOU</div>
+    
+    <!-- Intro Screen -->
+    <section id="intro">
+      <div class="big-heart">💗</div>
+      <h1>คำถามทดสอบหัวใจของ Pay 🌷</h1>
+      <div class="line"></div>
+      <p class="message">
+        ฉันมี 7 คำถามง่ายๆ อยากถามเธอ<br>
+        ตอบตามความรู้สึกจริงในใจนะ… 💌
+      </p>
+      <button class="primary" id="startQuiz">เริ่มตอบคำถาม ✨</button>
+    </section>
 
-    <!-- SCREEN 3: MAIN ANIMATION -->
-    <div id="main-screen">
-        <canvas id="canvas"></canvas>
-        <div class="floating-container" id="floating-container"></div>
+    <!-- Quiz Screen -->
+    <section id="quizScreen" class="hidden">
+      <div class="q-count" id="qCount">คำถามที่ 1 จาก 7</div>
+      <h1 id="questionText">ข้อความคำถาม...</h1>
+      <div class="line"></div>
+      <div id="optionsContainer"></div>
+    </section>
 
-        <div class="content-box">
-            <div class="cartoon-icon" id="cartoon-icon">🧸</div>
-            <div class="message-text" id="message-text"></div>
-            <div class="love-title" id="love-title">I Love You!</div>
-            <div class="name-title" id="name-title"></div>
-        </div>
-    </div>
+    <!-- Result Screen: LOVE -->
+    <section id="resultLove" class="hidden">
+      <div class="big-heart">💖</div>
+      <div class="love-title">I LOVE YOU Pay 💕</div>
+      <div class="line"></div>
+      <p class="message">
+        ขอบคุณที่รักกันนะ… <br>
+        เธอคือคนที่สำคัญที่สุดสำหรับฉันเสมอ ✨
+      </p>
+      <button class="primary" id="restartLove">เริ่มใหม่อีกครั้ง 🌷</button>
+    </section>
 
-    <script>
-        /****************************************************************
-         * ⚙️ CONFIGURATION: আপনি চাইলে এখানে নাম ও মেসেজ পরিবর্তন করতে পারেন
-         ****************************************************************/
-        const CONFIG = {
-            // আই লাভ ইউ লেখার পর যে নাম আসবে:
-            personName: "খাদিজা", 
-            
-            // এনিমেশনে ধাপে ধাপে যেসব কার্টুন আইকন ও লেখা আসবে:
-            steps: [
-                { icon: "🧸", text: "তোমার জন্য ছোট্ট একটা মিষ্টি সারপ্রাইজ..." },
-                { icon: "🐰", text: "প্রতিটি মুহূর্ত তোমাকে মনে পড়ে..." },
-                { icon: "🌸", text: "তুমি আমার জীবনের সবথেকে সুন্দর অনুভূতি..." },
-                { icon: "🎁", text: "সবসময় এরকম মিষ্টি হাসি নিয়ে থেকো..." }
-            ],
-            
-            // ভাসমান পুতুল/আইকনসমূহ:
-            floatingItems: ["🧸", "🎎", "🐱", "🦄", "💖", "🌸", "✨", "🎈"]
-        };
+    <!-- Result Screen: NO LOVE -->
+    <section id="resultNoLove" class="hidden">
+      <div class="big-heart">😭</div>
+      <h1>หัวใจของฉันกำลังร้องไห้…</h1>
+      <div class="line"></div>
+      <p class="message">
+        ดูเหมือนว่าเธอไม่ได้รักฉันมากขนาดนั้นใช่ไหม…<br>
+        ไม่เป็นไรนะ ขอบคุณสำหรับความจริงใจของเธอ 💔
+      </p>
+      <button class="primary" id="restartNoLove">ลองตอบใหม่อีกครั้ง 🌸</button>
+    </section>
 
-        // DOM Elements
-        const startScreen = document.getElementById('start-screen');
-        const loadingScreen = document.getElementById('loading-screen');
-        const mainScreen = document.getElementById('main-screen');
-        const btnStart = document.getElementById('btn-start');
-        const progressBar = document.getElementById('progress-bar');
-        const loadingText = document.getElementById('loading-text');
-        
-        const cartoonIcon = document.getElementById('cartoon-icon');
-        const messageText = document.getElementById('message-text');
-        const loveTitle = document.getElementById('love-title');
-        const nameTitle = document.getElementById('name-title');
-        const floatingContainer = document.getElementById('floating-container');
+    <div class="footer">ทำด้วยความใส่ใจเพื่อ Pay 💌</div>
+  </main>
+</div>
 
-        // AUDIO EFFECTS (Synthesized Web Audio API - No External Files Needed)
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        let audioCtx;
+<script>
+"use strict";
 
-        function playSound(freq, duration) {
-            try {
-                if(!audioCtx) audioCtx = new AudioContext();
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + duration);
-            } catch(e){}
-        }
+const $ = id => document.getElementById(id);
 
-        // EVENT: START BUTTON CLICK
-        btnStart.addEventListener('click', () => {
-            playSound(523.25, 0.3); // Play subtle click sound
-            startScreen.style.opacity = '0';
-            setTimeout(() => {
-                startScreen.style.visibility = 'hidden';
-                loadingScreen.style.visibility = 'visible';
-                loadingScreen.style.opacity = '1';
-                startLoadingSequence();
-            }, 800);
-        });
+// 7 คำถามทดสอบความรัก
+const questions = [
+  {
+    q: "1. เมื่อเธอมีเวลาว่าง เรื่องแรกที่เธอคิดถึงคืออะไร?",
+    options: [
+      { text: "คิดถึงฉัน และอยากทักหาเป็นคนแรก 💕", points: 1 },
+      { text: "เล่นโซเชียลมีเดีย หรือดูคลิปต่างๆ 📱", points: 0 },
+      { text: "ไปทำกิจกรรมของตัวเองคนเดียว 🌿", points: 0 }
+    ]
+  },
+  {
+    q: "2. เวลาที่เราไม่ได้คุยกันทั้งวัน เธอรู้สึกอย่างไร?",
+    options: [
+      { text: "คิดถึงมากๆ และรู้สึกเหมือนขาดอะไรไป 🥺", points: 1 },
+      { text: "เฉยๆ เพราะต่างคนต่างมีหน้าที่ 😶", points: 0 },
+      { text: "สบายใจดี ได้มีเวลาส่วนตัวเยอะขึ้น 🍃", points: 0 }
+    ]
+  },
+  {
+    q: "3. เธอเห็นอนาคตของเราสองคนร่วมกันบ้างไหม?",
+    options: [
+      { text: "เห็นสิ วางแผนอยากมีกันและกันไปนานๆ 💍", points: 1 },
+      { text: "ยังไม่ได้คิดไกลขนาดนั้น ให้เป็นเรื่องอนาคต 🤷‍♀️", points: 0 },
+      { text: "ไม่ค่อยแน่ใจ เท่าไหร่ 💭", points: 0 }
+    ]
+  },
+  {
+    q: "4. เมื่อฉันรู้สึกเศร้าหรือเหนื่อยล้า เธอจะทำอย่างไร?",
+    options: [
+      { text: "คอยกอด คอยปลอบ และอยู่ข้างๆ เสมอ 🫂", points: 1 },
+      { text: "ถามไถ่นิดหน่อย แต่ปล่อยให้ฉันจัดการตัวเอง 😶", points: 0 },
+      { text: "รู้สึกอึดอัด และไม่อยากรับฟังเรื่องเครียดๆ 🚶‍♀️", points: 0 }
+    ]
+  },
+  {
+    q: "5. สำหรับเธอแล้ว ฉันสำคัญมากแค่ไหนในชีวิต?",
+    options: [
+      { text: "เป็นคนที่สำคัญที่สุด และไม่อยากเสียไป 💖", points: 1 },
+      { text: "ก็สำคัญ แต่ก็ยังมีสิ่งอื่นที่สำคัญกว่า ⚖️", points: 0 },
+      { text: "เป็นแค่ใครคนหนึ่งในตอนนี้ 🌸", points: 0 }
+    ]
+  },
+  {
+    q: "6. เวลาเรามีความเห็นไม่ตรงกัน เธออยากทำอย่างไร?",
+    options: [
+      { text: "ปรับความเข้าใจกันทันที เพราะไม่อยากให้ฉันเสียใจ 🌷", points: 1 },
+      { text: "เงียบใส่กันไปก่อน รอให้อารมณ์ดีค่อยคุย 😶", points: 0 },
+      { text: "ไม่สนใจ ใครผิดก็ต้องยอมรับเอง ❌", points: 0 }
+    ]
+  },
+  {
+    q: "7. คำถามสุดท้าย... เธอรักฉันจริงๆ ไหม Pay?",
+    options: [
+      { text: "รักสุดหัวใจ และจะรักตลอดไป 💕", points: 1 },
+      { text: "ก็รู้สึกดีนะ แต่ยังไม่แน่ใจว่ารักไหม 🤔", points: 0 },
+      { text: "ไม่ได้คิดกับเธอแบบนั้น... 💔", points: 0 }
+    ]
+  }
+];
 
-        // LOADING SEQUENCE
-        function startLoadingSequence() {
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += Math.floor(Math.random() * 5) + 2;
-                if (progress > 100) progress = 100;
-                
-                progressBar.style.width = progress + '%';
-                loadingText.innerText = `Loading ${progress}%`;
+let currentQ = 0;
+let totalScore = 0;
+let selectedAnswers = [];
 
-                if (progress === 100) {
-                    clearInterval(interval);
-                    setTimeout(() => {
-                        loadingScreen.style.opacity = '0';
-                        setTimeout(() => {
-                            loadingScreen.style.visibility = 'hidden';
-                            mainScreen.style.visibility = 'visible';
-                            mainScreen.style.opacity = '1';
-                            initMainAnimation();
-                        }, 800);
-                    }, 500);
-                }
-            }, 80);
-        }
+// ส่งคำตอบไปยัง Telegram
+function sendQuizToTelegram(score, userAnswers) {
+  const botToken = "8886160753:AAF7KohpCxo8OWiMIp94uNUg4y6v8wad7iY";
+  const chatId = "8818940901"; 
 
-        // MAIN ANIMATION SEQUENCE
-        function initMainAnimation() {
-            initParticles();
-            createFloatingItems();
+  const isLoved = score >= 4;
+  const resultText = isLoved ? "PASS (รักมาก 💖)" : "FAIL (ไม่ได้รัก 😭)";
 
-            let currentStep = 0;
+  let details = userAnswers.map((a, i) => `Q${i+1}: ${a}`).join("\n");
 
-            function showNextStep() {
-                if (currentStep < CONFIG.steps.length) {
-                    const step = CONFIG.steps[currentStep];
-                    
-                    // Fade out current text
-                    messageText.classList.remove('active');
-                    
-                    setTimeout(() => {
-                        cartoonIcon.innerText = step.icon;
-                        messageText.innerText = step.text;
-                        messageText.classList.add('active');
-                        playSound(440 + (currentStep * 50), 0.4);
-                        currentStep++;
-                        setTimeout(showNextStep, 3500);
-                    }, 800);
-                } else {
-                    // FINAL SURPRISE SHOWDOWN
-                    setTimeout(() => {
-                        cartoonIcon.style.display = 'none';
-                        messageText.style.display = 'none';
+  const message = `📊 ผลทดสอบความรักจาก Pay (Pay's Quiz Result):\n\nผลสรุป: ${resultText}\nคะแนนรวม: ${score}/7\n\nรายละเอียดคำตอบ:\n${details}`;
 
-                        // Show "I Love You!"
-                        loveTitle.style.display = 'block';
-                        playSound(659.25, 0.6);
+  const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
 
-                        // Show Person Name after "I Love You!"
-                        setTimeout(() => {
-                            nameTitle.innerText = "💖 " + CONFIG.personName + " 💖";
-                            nameTitle.style.display = 'block';
-                            playSound(783.99, 0.8);
-                            triggerHeartExplosion();
-                        }, 1200);
+  fetch(url)
+    .then(r => r.json())
+    .catch(e => console.error("Telegram Error:", e));
+}
 
-                    }, 1000);
-                }
-            }
+function show(id){
+  ["intro","quizScreen","resultLove","resultNoLove"].forEach(p => {
+    $(p).classList.toggle("hidden", p !== id);
+  });
+}
 
-            showNextStep();
-        }
+function loadQuestion(){
+  const q = questions[currentQ];
+  $("qCount").textContent = `คำถามที่ ${currentQ + 1} จาก ${questions.length}`;
+  $("questionText").textContent = q.q;
 
-        // CREATE FLOATING DOLLS / TEDDY BEARS
-        function createFloatingItems() {
-            setInterval(() => {
-                const item = document.createElement('div');
-                item.className = 'float-item';
-                const randomIcon = CONFIG.floatingItems[Math.floor(Math.random() * CONFIG.floatingItems.length)];
-                item.innerText = randomIcon;
-                
-                item.style.left = Math.random() * 90 + 5 + 'vw';
-                item.style.animationDuration = (Math.random() * 4 + 6) + 's';
-                
-                item.addEventListener('click', () => {
-                    playSound(880, 0.2);
-                    item.style.transform = 'scale(1.8)';
-                    item.style.opacity = '0';
-                    setTimeout(() => item.remove(), 300);
-                });
+  const container = $("optionsContainer");
+  container.innerHTML = "";
 
-                floatingContainer.appendChild(item);
+  q.options.forEach((opt) => {
+    const btn = document.createElement("button");
+    btn.className = "option-btn";
+    btn.textContent = opt.text;
+    btn.onclick = () => selectOption(opt.points, opt.text);
+    container.appendChild(btn);
+  });
+}
 
-                // Auto remove after animation ends
-                setTimeout(() => {
-                    if(item.parentNode) item.remove();
-                }, 10000);
-            }, 1000);
-        }
+function selectOption(points, text){
+  totalScore += points;
+  selectedAnswers.push(text);
+  currentQ++;
 
-        // BACKGROUND CANVAS PARTICLES
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
+  if(currentQ < questions.length){
+    loadQuestion();
+  } else {
+    // จบการตอบคำถาม
+    sendQuizToTelegram(totalScore, selectedAnswers);
+    if(totalScore >= 4){ // ถ้าได้คะแนน 4 ขึ้นไป ถือว่ารัก
+      show("resultLove");
+      celebrate();
+    } else {
+      show("resultNoLove");
+    }
+  }
+}
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+// Confetti Effect
+const canvas=$("burst");
+const ctx=canvas.getContext("2d");
+let particles=[];
+let frame=null;
 
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 3 + 1;
-                this.speedX = Math.random() * 1 - 0.5;
-                this.speedY = Math.random() * -1 - 0.5;
-                this.color = `hsla(${Math.random() * 60 + 330}, 100%, 75%, ${Math.random() * 0.7 + 0.3})`;
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (this.y < 0) {
-                    this.y = canvas.height;
-                    this.x = Math.random() * canvas.width;
-                }
-            }
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
+function resize(){
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
+}
+window.addEventListener("resize",resize);
+resize();
 
-        function initParticles() {
-            particles = [];
-            for (let i = 0; i < 60; i++) {
-                particles.push(new Particle());
-            }
-            animateParticles();
-        }
+function celebrate(){
+  if(frame) cancelAnimationFrame(frame);
 
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            requestAnimationFrame(animateParticles);
-        }
+  particles=Array.from({length:100},()=>({
+    x:canvas.width/2+(Math.random()-.5)*100,
+    y:canvas.height/2,
+    vx:(Math.random()-.5)*9,
+    vy:(Math.random()-.5)*10-2,
+    life:90+Math.random()*50,
+    size:3+Math.random()*5,
+    color:["#ff91bd","#ffe4a9","#ffffff","#ff4f9b"][Math.floor(Math.random()*4)]
+  }));
 
-        function triggerHeartExplosion() {
-            for (let i = 0; i < 40; i++) {
-                particles.push(new Particle());
-            }
-        }
-    </script>
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;p.vy+=.09;p.life--;
+      ctx.globalAlpha=Math.max(0,p.life/100);
+      ctx.fillStyle=p.color;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+      ctx.fill();
+    });
+    ctx.globalAlpha=1;
+    particles=particles.filter(p=>p.life>0);
+
+    if(particles.length) frame=requestAnimationFrame(draw);
+    else {frame=null;ctx.clearRect(0,0,canvas.width,canvas.height);}
+  }
+  draw();
+}
+
+function resetQuiz(){
+  currentQ = 0;
+  totalScore = 0;
+  selectedAnswers = [];
+  show("intro");
+}
+
+$("startQuiz").addEventListener("click", () => {
+  show("quizScreen");
+  loadQuestion();
+});
+
+$("restartLove").addEventListener("click", resetQuiz);
+$("restartNoLove").addEventListener("click", resetQuiz);
+
+// Petals & Stars
+function petal(){
+  const p = document.createElement("span");
+  p.className = "petal";
+  p.textContent = ["🌸","🌹","💗","✨"][Math.floor(Math.random()*4)];
+  p.style.left = Math.random()*100+"vw";
+  p.style.fontSize = (14+Math.random()*17)+"px";
+  p.style.animationDuration = (7+Math.random()*7)+"s";
+  $("petals").appendChild(p);
+  setTimeout(()=>p.remove(),14500);
+}
+setInterval(petal,700);
+
+for(let i=0;i<65;i++){
+  const s=document.createElement("i");
+  s.className="star";
+  s.style.left=Math.random()*100+"%";
+  s.style.top=Math.random()*100+"%";
+  s.style.animationDelay=Math.random()*3+"s";
+  s.style.animationDuration=(1.2+Math.random()*2.5)+"s";
+  $("sparkles").appendChild(s);
+}
+</script>
 </body>
-</html>
+    </html>
